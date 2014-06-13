@@ -21,7 +21,7 @@ import (
 	"crypto/sha1"
 	"errors"
 	"io"
-	//"mss/lib/stdlog"
+	"mss/lib/stdlog"
 	"strconv"
 	"sync"
 	"time"
@@ -217,7 +217,7 @@ func (p *Pool) get() (Conn, error) {
 
 	// No idle connection, create new.
 
-	//stdlog.Println("new conn...")
+	stdlog.Println("new conn...")
 	dial := p.Dial
 	p.active += 1
 	p.mu.Unlock()
