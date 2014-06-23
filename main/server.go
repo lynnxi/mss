@@ -83,6 +83,7 @@ func (server *Server) handleConnection(connection *Connection) {
 		if !exist {
 			connection.WriteReply(ErrorReply(config.BadCommandError))
 		}
+
 		reply, err := DescHandler[handlerDesc[0].(string)](server, command)
 		// method := reflect.ValueOf(server).MethodByName(methodNames[0].(string))
 		// in := []reflect.Value{reflect.ValueOf(connection), reflect.ValueOf(command)}

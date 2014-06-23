@@ -20,8 +20,8 @@ import (
 	"crypto/rand"
 	"crypto/sha1"
 	"errors"
+	//	"fmt"
 	"io"
-	"mss/lib/stdlog"
 	"strconv"
 	"sync"
 	"time"
@@ -192,7 +192,7 @@ func (p *Pool) get() (Conn, error) {
 	}
 
 	// Get idle connection.
-
+	//fmt.Println(p.idle.Len())
 	for i, n := 0, p.idle.Len(); i < n; i++ {
 		e := p.idle.Front()
 		if e == nil {
@@ -217,7 +217,6 @@ func (p *Pool) get() (Conn, error) {
 
 	// No idle connection, create new.
 
-	stdlog.Println("new conn...")
 	dial := p.Dial
 	p.active += 1
 	p.mu.Unlock()
