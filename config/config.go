@@ -40,3 +40,8 @@ var MssClusterConfig = map[string]string{
 var AppRedisConfig = [...]string{"127.0.0.1:7777", "127.0.0.1:7778", "127.0.0.1:7779"}
 
 //var AppRedisConfig = [...]string{"127.0.0.1:7777"}
+var Mode = "moa"
+
+var MoaConfig = map[string]map[string][]interface{}{
+	"/service/sso-service": {"host": []interface{}{"127.0.0.1"}, "method": []interface{}{"queryAppById"}},
+}

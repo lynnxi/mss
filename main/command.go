@@ -69,6 +69,14 @@ func (cmd *Command) Key() []byte {
 	}
 }
 
+func (cmd *Command) Keyo() []byte {
+	if len(cmd.args) > 1 {
+		return cmd.args[1]
+	} else {
+		return cmd.args[0]
+	}
+}
+
 // 大写的指令名称
 func (cmd *Command) Name() string {
 	return string(bytes.ToUpper(cmd.args[0]))

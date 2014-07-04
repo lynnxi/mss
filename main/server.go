@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/vmihailenco/msgpack"
 	"hash/crc32"
 	"mss/config"
 	"mss/lib/stdlog"
@@ -84,6 +85,18 @@ func (server *Server) handleConnection(connection *Connection) {
 			connection.WriteReply(ErrorReply(config.BadCommandError))
 		}
 
+		if config.Mode == "moa" {
+			var data map[string]interface{}
+			err = msgpack.Unmarshal(command.Keyo(), &data)
+
+			action := data["action"]
+			params := data["params"].(map[interface{}]interface{})
+			method := params[string("m")].(string)
+			args := params[string("args")]
+
+			continue
+
+		}
 		reply, err := DescHandler[handlerDesc[0].(string)](server, command)
 		// method := reflect.ValueOf(server).MethodByName(methodNames[0].(string))
 		// in := []reflect.Value{reflect.ValueOf(connection), reflect.ValueOf(command)}
