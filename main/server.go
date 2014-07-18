@@ -89,15 +89,44 @@ func (server *Server) handleConnection(connection *Connection) {
 			var data map[string]interface{}
 			err = msgpack.Unmarshal(command.Keyo(), &data)
 
-			action := data["action"]
+			action := data["action"].(string)
 			params := data["params"].(map[interface{}]interface{})
 			method := params[string("m")].(string)
-			args := params[string("args")]
+			//args := params[string("args")]
 
-			continue
+			// //找到对应得handler处理
+			moaHandlerDesc, exist := config.Moarules[action+"/"+method]["handler"]
+			if !exist {
+				connection.WriteReply(ErrorReply(config.BadCommandError))
+			}
+			reply, err := MoaDescHandler[moaHandlerDesc[0].(string)](server, command)
 
+			//下面这段写在下面竟然编译过不去
+			if err != nil {
+				connection.WriteReply(ErrorReply(config.BadCommandError))
+			} else if reply != nil {
+				err = connection.WriteReply(reply)
+				if err != nil {
+					stdlog.Println("conn write err : " + err.Error())
+					connection.Close()
+					break
+				}
+			}
+
+		} else {
+			reply, err := DescHandler[handlerDesc[0].(string)](server, command)
+			if err != nil {
+				connection.WriteReply(ErrorReply(config.BadCommandError))
+			} else if reply != nil {
+				err = connection.WriteReply(reply)
+				if err != nil {
+					stdlog.Println("conn write err : " + err.Error())
+					connection.Close()
+					break
+				}
+			}
 		}
-		reply, err := DescHandler[handlerDesc[0].(string)](server, command)
+
 		// method := reflect.ValueOf(server).MethodByName(methodNames[0].(string))
 		// in := []reflect.Value{reflect.ValueOf(connection), reflect.ValueOf(command)}
 		// callResult := method.Call(in)
@@ -106,16 +135,6 @@ func (server *Server) handleConnection(connection *Connection) {
 		// 	reply = callResult[0].Interface().(*Reply)
 		// }
 
-		if err != nil {
-			connection.WriteReply(ErrorReply(config.BadCommandError))
-		} else if reply != nil {
-			err = connection.WriteReply(reply)
-			if err != nil {
-				stdlog.Println("conn write err : " + err.Error())
-				connection.Close()
-				break
-			}
-		}
 	}
 
 }

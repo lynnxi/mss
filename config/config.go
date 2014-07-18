@@ -33,6 +33,11 @@ var Cmdrules = map[string]map[string][]interface{}{
 	"MENPROF_G": {"argsRange": []interface{}{1, -1}, "handler": []interface{}{"PprofHandler"}},
 }
 
+// 存放指令格式规则，参数范围
+var Moarules = map[string]map[string][]interface{}{
+	"/service/sso-service/queryAppById": {"host": []interface{}{"127.0.0.1"}, "argsRange": []interface{}{1, -1}, "handler": []interface{}{"SsoQueryAppByIdHandler"}},
+}
+
 var MssClusterConfig = map[string]string{
 	"test": "['127.0.0.1', '127.0.0.2']",
 }
@@ -41,7 +46,3 @@ var AppRedisConfig = [...]string{"127.0.0.1:7777", "127.0.0.1:7778", "127.0.0.1:
 
 //var AppRedisConfig = [...]string{"127.0.0.1:7777"}
 var Mode = "moa"
-
-var MoaConfig = map[string]map[string][]interface{}{
-	"/service/sso-service": {"host": []interface{}{"127.0.0.1"}, "method": []interface{}{"queryAppById"}},
-}
